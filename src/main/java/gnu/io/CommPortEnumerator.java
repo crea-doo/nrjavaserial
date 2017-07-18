@@ -59,6 +59,8 @@ package  gnu.io;
 
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
+
 /**
 * @author Trent Jarvi
 * @version %I%, %G%
@@ -69,12 +71,14 @@ import java.util.Enumeration;
 @SuppressWarnings("unchecked")
 class CommPortEnumerator implements Enumeration
 {
+	
+	private static final Logger staticLog = Logger.getLogger(CommPortEnumerator.class);
+	
 	private CommPortIdentifier index;
-	private final static boolean debug = false;
+	
 	static
 	{
-		if (debug)
-			System.out.println("CommPortEnumerator:{}");
+		staticLog.debug("CommPortEnumerator:{}");
 	}
 
 	CommPortEnumerator()
@@ -90,7 +94,7 @@ class CommPortEnumerator implements Enumeration
 ------------------------------------------------------------------------------*/
 	public Object nextElement()
 	{
-		if(debug) System.out.println("CommPortEnumerator:nextElement()");
+		staticLog.debug("CommPortEnumerator:nextElement()");
 		synchronized (CommPortIdentifier.Sync)
 		{
 			if(index != null) index = index.next;
@@ -108,7 +112,7 @@ class CommPortEnumerator implements Enumeration
 ------------------------------------------------------------------------------*/
 	public boolean hasMoreElements()
 	{
-		if(debug) System.out.println("CommPortEnumerator:hasMoreElements() " + CommPortIdentifier.CommPortIndex == null ? false : true );
+		staticLog.debug("CommPortEnumerator:hasMoreElements() " + CommPortIdentifier.CommPortIndex == null ? false : true );
 		synchronized (CommPortIdentifier.Sync)
 		{
 			if(index != null) return index.next == null ? false : true;

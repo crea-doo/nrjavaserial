@@ -58,9 +58,11 @@
 package  gnu.io;
 
 import  java.io.FileDescriptor;
-import java.util.ArrayList;
 import java.util.HashMap;
 import  java.util.Vector;
+
+import org.apache.log4j.Logger;
+
 import  java.util.Enumeration;
 
 /**
@@ -71,6 +73,10 @@ import  java.util.Enumeration;
 
 public class CommPortIdentifier extends Object /* extends Vector? */
 {
+	
+	private static final Logger staticLog = Logger.getLogger(CommPortIdentifier.class);
+	private final Logger log = Logger.getLogger(this.getClass());
+	
 	public static final int PORT_SERIAL   = 1;  // rs232 Port
 	public static final int PORT_PARALLEL = 2;  // Parallel Port
 	public static final int PORT_I2C      = 3;  // i2c Port
@@ -102,7 +108,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 	// initialization only done once....
 	static 
 	{
-		if(debug) System.out.println("CommPortIdentifier:static initialization()");
+		staticLog.debug("CommPortIdentifier:static initialization()");
 		Sync = new Object();
 		try 
 		{
@@ -111,7 +117,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 		} 
 		catch (Throwable e) 
 		{
-			System.err.println(e + " thrown while loading " + "gnu.io.RXTXCommDriver");
+			staticLog.error("Error thrown while loading " + "gnu.io.RXTXCommDriver", e);
 		}
 
 		String OS;
@@ -119,8 +125,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 		OS = System.getProperty("os.name");
 		if(OS.toLowerCase().indexOf("linux") == -1)
 		{
-			if (debug)
-				System.out.println("Have not implemented native_psmisc_report_owner(PortName)); in CommPortIdentifier");
+			staticLog.debug("Have not implemented native_psmisc_report_owner(PortName)); in CommPortIdentifier");
 		}
 		//System.loadLibrary( "rxtxSerial" );
 		SerialManager.getInstance();
@@ -147,7 +152,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 	public static void addPortName(String s, int type, CommDriver c) 
 	{ 
 
-		if(debug) System.out.println("CommPortIdentifier:addPortName("+s+")");
+		staticLog.debug("CommPortIdentifier:addPortName("+s+")");
 		AddIdentifierToList(new CommPortIdentifier(s, null, type, c));
 	}
 /*------------------------------------------------------------------------------
@@ -160,13 +165,13 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 ------------------------------------------------------------------------------*/
 	private static void AddIdentifierToList( CommPortIdentifier cpi)
 	{
-		if(debug) System.out.println("CommPortIdentifier:AddIdentifierToList()");
+		staticLog.debug("CommPortIdentifier:AddIdentifierToList()");
 		synchronized (Sync) 
 		{
 			if (CommPortIndex == null) 
 			{
 				CommPortIndex = cpi;
-				if(debug) System.out.println("CommPortIdentifier:AddIdentifierToList() null");
+				staticLog.debug("CommPortIdentifier:AddIdentifierToList() null");
 			}
 			else
 			{ 
@@ -174,7 +179,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 				while (index.next != null)
 				{
 					index = index.next;
-					if(debug) System.out.println("CommPortIdentifier:AddIdentifierToList() index.next");
+					staticLog.debug("CommPortIdentifier:AddIdentifierToList() index.next");
 				}
 				index.next = cpi;
 			} 
@@ -191,7 +196,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 	@SuppressWarnings("unchecked")
 	public void addPortOwnershipListener(CommPortOwnershipListener c) 
 	{ 
-		if(debug) System.out.println("CommPortIdentifier:addPortOwnershipListener()");
+		log.debug("CommPortIdentifier:addPortOwnershipListener()");
 
 		/*  is the Vector instantiated? */
 
@@ -217,7 +222,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 ------------------------------------------------------------------------------*/
 	public String getCurrentOwner() 
 	{ 
-		if(debug) System.out.println("CommPortIdentifier:getCurrentOwner()");
+		log.debug("CommPortIdentifier:getCurrentOwner()");
 		return( Owner );
 	}
 /*------------------------------------------------------------------------------
@@ -230,7 +235,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 ------------------------------------------------------------------------------*/
 	public String getName() 
 	{ 
-		if(debug) System.out.println("CommPortIdentifier:getName()");
+		log.debug("CommPortIdentifier:getName()");
 		return( PortName );
 	}
 /*------------------------------------------------------------------------------
@@ -243,7 +248,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 ------------------------------------------------------------------------------*/
 	static public CommPortIdentifier getPortIdentifier(String s) throws NoSuchPortException 
 	{ 
-		if(debug) System.out.println("CommPortIdentifier:getPortIdentifier(" + s +")");
+		staticLog.debug("CommPortIdentifier:getPortIdentifier(" + s +")");
 		CommPortIdentifier index;
 
 		synchronized (Sync) 
@@ -268,8 +273,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 		if (index != null) return index;
 		else
 		{
-			if ( debug )
-				System.out.println("not found!" + s);
+			staticLog.debug("not found!" + s);
 			throw new NoSuchPortException();
 		}
 	}
@@ -284,7 +288,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 	static public CommPortIdentifier getPortIdentifier(CommPort p) 
 		throws NoSuchPortException 	
 	{ 
-		if(debug) System.out.println("CommPortIdentifier:getPortIdentifier(CommPort)");
+		staticLog.debug("CommPortIdentifier:getPortIdentifier(CommPort)");
 		CommPortIdentifier c;
 		synchronized( Sync )
 		{
@@ -295,8 +299,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 		if ( c != null )
 			return (c);
 
-		if ( debug )
-			System.out.println("not found!" + p.getName());
+		staticLog.debug("not found!" + p.getName());
 		throw new NoSuchPortException();
 	}
 /*------------------------------------------------------------------------------
@@ -310,7 +313,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 	@SuppressWarnings("unchecked")
 	static public Enumeration getPortIdentifiers() 
 	{ 
-		if(debug) System.out.println("static CommPortIdentifier:getPortIdentifiers()");
+		staticLog.debug("static CommPortIdentifier:getPortIdentifiers()");
 		//Do not allow anybody get any ports while we are re-initializing
 		//because the CommPortIndex points to invalid instances during that time
 		synchronized(Sync) {
@@ -355,8 +358,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 			} 
 			catch (Throwable e) 
 			{
-				System.err.println(e + " thrown while loading " + "gnu.io.RXTXCommDriver");
-				System.err.flush();
+				staticLog.error("Error thrown while loading " + "gnu.io.RXTXCommDriver", e);
 			}
 		}
 		return new CommPortEnumerator();
@@ -372,7 +374,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 ------------------------------------------------------------------------------*/
 	public int getPortType() 
 	{ 
-		if(debug) System.out.println("CommPortIdentifier:getPortType()");
+		log.debug("CommPortIdentifier:getPortType()");
 		return( PortType );
 	}
 /*------------------------------------------------------------------------------
@@ -385,7 +387,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 ------------------------------------------------------------------------------*/
 	public synchronized boolean isCurrentlyOwned() 
 	{ 
-		if(debug) System.out.println("CommPortIdentifier:isCurrentlyOwned()");
+		log.debug("CommPortIdentifier:isCurrentlyOwned()");
 		return(!Available);
 	}
 /*------------------------------------------------------------------------------
@@ -398,7 +400,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 ------------------------------------------------------------------------------*/
 	public synchronized CommPort open(FileDescriptor f) throws UnsupportedCommOperationException 
 	{ 
-		if(debug) System.out.println("CommPortIdentifier:open(FileDescriptor)");
+		log.debug("CommPortIdentifier:open(FileDescriptor)");
 		throw new UnsupportedCommOperationException();
 	}
 	private native String native_psmisc_report_owner(String PortName);
@@ -418,7 +420,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 	public RXTXPort open(String TheOwner, int i) 
 		throws gnu.io.PortInUseException 
 	{ 
-		if(debug) System.out.println("CommPortIdentifier:open("+TheOwner + ", " +i+")");
+		log.debug("CommPortIdentifier:open("+TheOwner + ", " +i+")");
 		boolean isAvailable;
 		synchronized(this) {
 			isAvailable = this.Available;
@@ -494,7 +496,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 ------------------------------------------------------------------------------*/
 	public void removePortOwnershipListener(CommPortOwnershipListener c) 
 	{ 
-		if(debug) System.out.println("CommPortIdentifier:removePortOwnershipListener()");
+		log.debug("CommPortIdentifier:removePortOwnershipListener()");
 		/* why is this called twice? */
 		if(ownershipListener != null)
 			ownershipListener.removeElement(c);
@@ -511,7 +513,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 	void internalClosePort() 
 	{
 		synchronized(this) {
-			if(debug) System.out.println("CommPortIdentifier:internalClosePort()");
+			log.debug("CommPortIdentifier:internalClosePort()");
 			Owner = null;
 			Available = true;
 			commport = null;
@@ -531,7 +533,7 @@ public class CommPortIdentifier extends Object /* extends Vector? */
 	@SuppressWarnings("unchecked")
 	void fireOwnershipEvent(int eventType)
 	{
-		if(debug) System.out.println("CommPortIdentifier:fireOwnershipEvent( " + eventType + " )");
+		log.debug("CommPortIdentifier:fireOwnershipEvent( " + eventType + " )");
 		if (ownershipListener != null)
 		{
 			CommPortOwnershipListener c;

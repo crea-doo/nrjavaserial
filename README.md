@@ -106,7 +106,7 @@ provides pointers for getting the appropriate SDK installed.
 
 # How to use NRSerialPort objects
     for(String s:NRSerialPort.getAvailableSerialPorts()){
-			System.out.println("Availible port: "+s);
+			System.out.println("Available port: "+s);
 		}
     String port = "COM3";
     int baudRate = 115200;

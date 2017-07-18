@@ -288,6 +288,7 @@ public class Zystem
 		}
 		else if ( mode == PRINT_MODE )
 		{
+			log.debug("PRINT_MODE: " + s)
 			System.out.println( s );
 			return( true );
 		}

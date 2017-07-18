@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'osgi'
 apply plugin: 'eclipse'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 sourceCompatibility = '1.6'
@@ -45,10 +46,11 @@ repositories {
 
 dependencies {
 	compile fileTree(dir: 'libs', includes: ['*.jar'])
-	testCompile 'junit:junit:4.12'
+	compile 'log4j:log4j:1.2.17'
 	compile 'commons-net:commons-net:3.3'
 	compile 'net.java.dev.jna:jna:4.2.2'
 	compile 'net.java.dev.jna:jna-platform:4.2.2'
+	testCompile 'junit:junit:4.12'
 }
 
 jar {
@@ -66,6 +68,15 @@ jar {
 		instruction 'Import-Package', 'com.sun.jna.platform.win32;resolution:=optional,org.apache.commons.net.telnet;resolution:=optional,*'
 	}
 }
+
+// Disable JavaDoc warnings
+//if (JavaVersion.current().isJava8Compatible()) {
+//    allprojects {
+//        tasks.withType(Javadoc) {
+//            options.addStringOption('Xdoclint:none', '-quiet')
+//        }
+//    }
+//}
 
 task javadocJar(type: Jar) {
 	classifier = 'javadoc'
@@ -118,6 +129,8 @@ uploadArchives {
 	repositories {
 		mavenDeployer {
 			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+			repository url: 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
 
 			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
 				authentication(userName: ossrhUsername, password: ossrhPassword)

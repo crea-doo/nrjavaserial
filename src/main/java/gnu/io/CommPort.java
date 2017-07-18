@@ -59,6 +59,9 @@ package gnu.io;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 
 /**
@@ -72,8 +75,10 @@ import java.io.IOException;
   * CommPort
   */
 public abstract class CommPort extends Object {
+	
+	private final Logger log = Logger.getLogger(this.getClass());
+	
 	protected String name;
-	private final static boolean debug = false;
 
 	public abstract void enableReceiveFraming( int f ) 
 		throws UnsupportedCommOperationException;
@@ -97,7 +102,7 @@ public abstract class CommPort extends Object {
 	@SuppressWarnings("static-access")
 	public void close() 
 	{
-		if (debug) System.out.println("CommPort:close()");
+		log.debug("CommPort:close()");
 
 		try
 		{
@@ -116,12 +121,12 @@ public abstract class CommPort extends Object {
 
 	public String getName()
 	{
-		if (debug) System.out.println("CommPort:getName()");
+		log.debug("CommPort:getName()");
 		return( name );
 	}
 	public String toString()
 	{
-		if (debug) System.out.println("CommPort:toString()");
+		log.debug("CommPort:toString()");
 		return( name );
 	}
 }

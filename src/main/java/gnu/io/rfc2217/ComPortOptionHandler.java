@@ -8,6 +8,7 @@
 package gnu.io.rfc2217;
 
 import org.apache.commons.net.telnet.TelnetOptionHandler;
+import org.apache.log4j.Logger;
 
 /**
  * RFC 2217 telnet COM-PORT-OPTION.
@@ -15,6 +16,8 @@ import org.apache.commons.net.telnet.TelnetOptionHandler;
  * @see <a href="http://tools.ietf.org/html/rfc2217">RFC 2217</a>
  */
 public class ComPortOptionHandler extends TelnetOptionHandler {
+	
+	private final Logger log = Logger.getLogger(this.getClass());
 
     private final TelnetSerialPort port;
 
@@ -40,7 +43,7 @@ public class ComPortOptionHandler extends TelnetOptionHandler {
         try {
             command = RFC2217.decodeComPortCommand(data);
         } catch (IllegalArgumentException e) {
-            System.err.println(this.port.getName() + ": rec'd invalid COM-PORT-OPTION command: " + e.getMessage());
+            log.error(this.port.getName() + ": rec'd invalid COM-PORT-OPTION command", e);
             return null;
         }
 

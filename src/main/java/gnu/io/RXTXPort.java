@@ -63,6 +63,8 @@ import java.util.TooManyListenersException;
 import java.lang.Math;
 import java.util.concurrent.*;
 
+import org.apache.log4j.Logger;
+
 /**
 * An extension of gnu.io.SerialPort
 * @see gnu.io.SerialPort
@@ -73,6 +75,8 @@ public class RXTXPort extends SerialPort
 	/* I had a report that some JRE's complain when MonitorThread
 	   tries to access private variables
 	*/
+	
+	private final Logger log = Logger.getLogger(this.getClass());
 
 	protected final static boolean debug = false;
 	protected final static boolean debug_read = false;
@@ -301,7 +305,7 @@ public class RXTXPort extends SerialPort
 		}
 		catch( IOException e )
 		{
-			e.printStackTrace();
+        	log.error("Unable to set flow control mode", e);
 			return;
 		}
 		flowmode=flowcontrol;
@@ -397,7 +401,7 @@ public class RXTXPort extends SerialPort
 	*/
 	public void enableReceiveTimeout( int time )
 	{
-		//System.out.println("Enabling receive timeout: "+time);
+		log.debug("Enabling receive timeout: "+time);
 		if (debug)
 			z.reportln( "RXTXPort:enableReceiveTimeout() called");
 		if( time >= 0 )
@@ -756,7 +760,7 @@ public class RXTXPort extends SerialPort
 				if( monThread.BI ) break;
 				return(false);
 			default:
-				System.err.println( "unknown event: " + event);
+				log.error( "unknown event: " + event);
 				return(false);
 		}
 		if( debug_events ) {
@@ -1139,7 +1143,7 @@ public class RXTXPort extends SerialPort
 				waitForTheNativeCodeSilly();
 				if ( fd == 0 )
 				{
-					System.err.println("File Descriptor for prot zero!!");
+					log.error("File Descriptor for prot zero!!");
 					throw new IOException();
 				}
 				writeByte( b, monThreadisInterrupted );

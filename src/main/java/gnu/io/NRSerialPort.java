@@ -7,8 +7,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TooManyListenersException;
 
+import org.apache.log4j.Logger;
+
 public class NRSerialPort
 {
+
+	private static final Logger staticLog = Logger.getLogger(NRSerialPort.class);
+	private final Logger log = Logger.getLogger(this.getClass());
 
     private RXTXPort serial;
     private String port = null;
@@ -33,7 +38,7 @@ public class NRSerialPort
     {
         if (isConnected())
         {
-            System.err.println(port + " is already connected.");
+        	log.error(port + " is already connected.");
             return true;
         }
 
@@ -64,7 +69,7 @@ public class NRSerialPort
             }
             catch (PortInUseException e)
             {
-                System.err.println("This is a bug, passed the ownership test above: " + e.getMessage());
+            	log.error("This is a bug, passed the ownership test above", e);
                 return false;
             }
 
@@ -82,10 +87,9 @@ public class NRSerialPort
         {
             throw new NativeResourceException(e.getMessage());
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            System.err.println("Failed to connect on port: " + port + " exception: ");
-            e.printStackTrace();
+            log.error("Failed to connect on port: " + port, ex);
             setConnected(false);
         }
 
@@ -132,7 +136,7 @@ public class NRSerialPort
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+            	log.error("Unable to close streams", e);
                 throw new RuntimeException(e);
             }
             serial = null;
@@ -164,7 +168,7 @@ public class NRSerialPort
         }
         catch (UnsatisfiedLinkError e)
         {
-            e.printStackTrace();
+        	staticLog.error("Error while determining available ports", e);
             throw new NativeResourceException(e.getMessage());
         }
 

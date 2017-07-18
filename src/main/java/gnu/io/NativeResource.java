@@ -5,9 +5,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.log4j.Logger;
+
 public class NativeResource {
 	
+	private final Logger log = Logger.getLogger(this.getClass());
+	
 	private boolean loaded = false;
+	
 	public synchronized void load(String libraryName) throws NativeResourceException {	
 		if(loaded)
 			return;
@@ -20,9 +25,9 @@ public class NativeResource {
 					System.load(System.getProperty(libraryName + ".userlib"));
 				}
 				return;
-			} catch (Exception e){
-				e.printStackTrace();
-				throw new NativeResourceException("Unable to load native resource from given path.\n" + e.getLocalizedMessage());
+			} catch (Exception ex){
+				log.error("Unable to load native resource from given path.", ex);
+				throw new NativeResourceException("Unable to load native resource from given path.\n" + ex.getLocalizedMessage());
 			}
 		}
 		loadLib(libraryName);	
@@ -46,14 +51,14 @@ public class NativeResource {
 		String libName = name.substring(name.indexOf("lib")+3);
 		try {
 			if(OSUtil.isARM()) {
-				//System.err.println("Attempting arm variants");
+				log.debug("Attempting arm variants");
 				for(int i=0;i<armLibs.length;i++) {
 					try {
 						inJarLoad(armLibs[i]);
-						//System.err.println("Arm lib success! "+armLibs[i]);
+						log.debug("Arm lib success! "+armLibs[i]);
 						return;
 					}catch(UnsatisfiedLinkError e) {
-						//System.err.println("Is not "+armLibs[i]);
+						log.debug("Is not "+armLibs[i]);
 					}
 				}
 			}else {
@@ -64,16 +69,16 @@ public class NativeResource {
 			if(OSUtil.isOSX() || OSUtil.isLinux()){
 				try{
 					inJarLoad("libNRJavaSerial_legacy");
-					//System.err.println("Normal lib failed, using legacy..OK!");
+					log.debug("Normal lib failed, using legacy..OK!");
 					return;
 				}catch(UnsatisfiedLinkError er){
-					ex.printStackTrace();
+					log.error("Unable to load native resource from given path.", er);
 				}
 			}else{
-				ex.printStackTrace();
+				log.error("Unable to load native resource from given path.", ex);
 			}
 			try{
-				//check to see if the library is availible in standard locations
+				//check to see if the library is available in standard locations
 				System.loadLibrary(libName);
 				testNativeCode();
 				return;
@@ -86,7 +91,7 @@ public class NativeResource {
 					return;
 				}catch(UnsatisfiedLinkError err){
 					//System.err.println("Failed to load all possible JNI local and from: \n"+System.getProperty("java.library.path"));
-					ex.printStackTrace();
+					log.error("Unable to load native resource from given path.", err);
 					throw new NativeResourceException("Unable to load deployed native resource");
 				}
 			}
@@ -128,21 +133,21 @@ public class NativeResource {
 				file="/native/freebsd/x86_32/" + name;
 			}
 		}else{
-			//System.err.println("Can't load native file: "+name+" for os arch: "+OSUtil.getOsArch());
+			log.debug("Can't load native file: "+name+" for os arch: "+OSUtil.getOsArch());
 			return null;
 		}
-		//System.out.println("Loading "+file);
+		log.debug("Loading "+file);
 		return getClass().getResourceAsStream(file);
 	}
 	
 	private void loadResource(File resource) {
 		if(!resource.canRead())
 			throw new RuntimeException("Cant open JNI file: "+resource.getAbsolutePath());
-		//System.out.println("Loading: "+resource.getAbsolutePath());
+		log.debug("Loading: "+resource.getAbsolutePath());
 		try {
 			System.load(resource.getAbsolutePath());
 		} catch(UnsatisfiedLinkError e){
-			System.out.println(e.getMessage());
+			log.error(e.getMessage());
 			throw e;
 		}
 	}
@@ -224,13 +229,16 @@ public class NativeResource {
 		if(fd == null || !fd.canRead()) {
 			throw new NativeResourceException("Unable to deploy native resource");
 		}
-		//System.out.println("Local file: "+fd.getAbsolutePath());
+		log.debug("Local file: "+fd.getAbsolutePath());
 		return fd;
 	}
 	
 	private static class OSUtil {
+		
+		private static final Logger staticLog = Logger.getLogger(OSUtil.class);
+		
 		public static boolean is64Bit() {
-			////System.out.println("Arch: "+getOsArch());
+			staticLog.debug("Arch: "+getOsArch());
 			return getOsArch().startsWith("x86_64") || getOsArch().startsWith("amd64");
 		}
 		public static boolean isARM() {
@@ -247,7 +255,7 @@ public class NativeResource {
 			return false;
 		}
 		public static boolean isWindows() {
-			////System.out.println("OS name: "+getOsName());
+			staticLog.debug("OS name: "+getOsName());
 			return getOsName().toLowerCase().startsWith("windows") ||getOsName().toLowerCase().startsWith("microsoft") || getOsName().toLowerCase().startsWith("ms");
 		}
 		
