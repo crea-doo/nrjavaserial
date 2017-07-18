@@ -288,8 +288,7 @@ public class Zystem
 		}
 		else if ( mode == PRINT_MODE )
 		{
-			log.debug("PRINT_MODE: " + s)
-			System.out.println( s );
+			System.out.println("REPORTLN: " + s );
 			return( true );
 		}
 		else if ( mode == MEX_MODE )
