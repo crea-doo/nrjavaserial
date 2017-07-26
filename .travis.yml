@@ -3,17 +3,17 @@ sudo: false
 matrix:
   include:
     # Compile Java as usual
-    - language: java
-      os: linux
-      jdk: oraclejdk7
+#    - language: java
+#      os: linux
+#      jdk: oraclejdk7
 
-    - language: java
-      os: linux
-      jdk: oraclejdk8
+#    - language: java
+#      os: linux
+#      jdk: oraclejdk8
 
-    - language: java
-      os: linux
-      jdk: openjdk7
+#    - language: java
+#      os: linux
+#      jdk: openjdk7
 
     - language: c
       os: linux
@@ -23,13 +23,13 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-5
-            - g++-5-multilib
-            - g++-5-multilib-arm-linux-gnueabi
-            - g++-5-multilib-arm-linux-gnueabihf
+            - g++-4.8
+            - g++-4.8-multilib
+            - g++-4.8-multilib-arm-linux-gnueabi
+            - g++-4.8-multilib-arm-linux-gnueabihf
             - g++-mingw-w64
       env:
-         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+         - MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8"
       before_script:
          - cd src/main/c
       script:
