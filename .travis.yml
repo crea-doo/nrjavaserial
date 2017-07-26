@@ -23,6 +23,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - liblockdev1-dev
             - g++-4.7
             - g++-4.7-multilib
             - g++-4.7-multilib-arm-linux-gnueabi
