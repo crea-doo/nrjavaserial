@@ -8,9 +8,9 @@
 # You'll need to have the following packages installed (Ubuntu wily):
 #
 # liblockdev1-dev
-# g++-5-multilib
-# g++-5-multilib-arm-linux-gnueabi
-# g++-5-multilib-arm-linux-gnueabihf
+# g++-4.7-multilib
+# g++-4.7-multilib-arm-linux-gnueabi
+# g++-4.7-multilib-arm-linux-gnueabihf
 # g++-mingw-w64
 #
 
@@ -25,10 +25,10 @@ CCLIN64=gcc $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m6
 LINKLIN64=g++ -m64 -shared
 
 CCLINARM=arm-linux-gnueabi-gcc-5 $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
-LINKLINARM=arm-linux-gnueabi-g++-5 -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
+LINKLINARM=arm-linux-gnueabi-g++-4.7 -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
 
 CCLINARM_HF=arm-linux-gnueabihf-gcc-5 $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
-LINKLINARM_HF=arm-linux-gnueabihf-g++-5 -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
+LINKLINARM_HF=arm-linux-gnueabihf-g++-4.7 -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
 
 CCLINANDROID=/home/opt/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/arm-linux-androideabi/bin/gcc $(LININCLUDE) -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MMD -MP
 LINKLINANDROID=/home/opt/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/arm-linux-androideabi/bin/g++ -shared

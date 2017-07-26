@@ -3,17 +3,17 @@ sudo: false
 matrix:
   include:
     # Compile Java as usual
-#    - language: java
-#      os: linux
-#      jdk: oraclejdk7
+    - language: java
+      os: linux
+      jdk: oraclejdk7
 
-#    - language: java
-#      os: linux
-#      jdk: oraclejdk8
+    - language: java
+      os: linux
+      jdk: oraclejdk8
 
-#    - language: java
-#      os: linux
-#      jdk: openjdk7
+    - language: java
+      os: linux
+      jdk: openjdk7
 
     - language: c
       os: linux
