@@ -15,16 +15,21 @@ matrix:
       os: linux
       jdk: openjdk7
 
-    - os: linux
+    - language: c
+      os: linux
       dist: trusty
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-4.9
+            - g++-5
+            - g++-5-multilib
+            - g++-5-multilib-arm-linux-gnueabi
+            - g++-5-multilib-arm-linux-gnueabihf
+            - g++-mingw-w64
       env:
-         - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
       before_script:
          - cd src/main/c
       script:
