@@ -1,9 +1,73 @@
-language: java
+sudo: false
 
-jdk:
-  - oraclejdk7
-  - oraclejdk8
-  - openjdk7
+matrix:
+  include:
+    # Compile Java as usual
+    - language: java
+      os: linux
+      jdk: oraclejdk7
 
-os:
-- linux
+    - language: java
+      os: linux
+      jdk: oraclejdk8
+
+    - language: java
+      os: linux
+      jdk: openjdk7
+
+    - os: linux
+      dist: trusty
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+      env:
+         - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+      before_script:
+         - cd src/main/c
+      script:
+         - make -f Makefile.ubuntu64 linux
+#         - make -f Makefile.ubuntu64 windows
+#         - make -f Makefile.ubuntu64 arm
+
+    # works on Precise and Trusty
+    #- os: linux
+    #  addons:
+    #    apt:
+    #      sources:
+    #        - ubuntu-toolchain-r-test
+    #      packages:
+    #        - g++-5
+    #  env:
+    #     - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+
+    # works on Precise and Trusty
+    #- os: linux
+    #  addons:
+    #    apt:
+    #      sources:
+    #        - ubuntu-toolchain-r-test
+    #      packages:
+    #        - g++-6
+    #  env:
+    #    - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+
+#    - os: osx
+#      osx_image: xcode8
+#      env:
+#        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+
+#    - os: osx
+#      osx_image: xcode8
+#      env:
+#        - MATRIX_EVAL="brew install gcc5 && CC=gcc-5 && CXX=g++-5"
+
+#    - os: osx
+#      osx_image: xcode8
+#      env:
+#        - MATRIX_EVAL="brew install gcc && CC=gcc-6 && CXX=g++-6"
+
+before_install:
+    - eval "${MATRIX_EVAL}"
