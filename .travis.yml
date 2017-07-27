@@ -24,7 +24,6 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - liblockdev1-dev
-            - liblockdev1-dev:i386
             - libstdc++-4.8-dev
             - g++-4.8
             - g++-4.8-multilib
@@ -36,7 +35,7 @@ matrix:
       before_script:
          - cd src/main/c
       script:
-         - make -f Makefile.ubuntu64 clean linux32
+#         - make -f Makefile.ubuntu64 clean linux32
          - make -f Makefile.ubuntu64 clean linux64
 #         - make -f Makefile.ubuntu64 windows
 #         - make -f Makefile.ubuntu64 arm
