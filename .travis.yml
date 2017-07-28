@@ -3,17 +3,17 @@ sudo: false
 matrix:
   include:
     # Compile Java as usual
-    - language: java
-      os: linux
-      jdk: oraclejdk7
+#    - language: java
+#      os: linux
+#      jdk: oraclejdk7
 
-    - language: java
-      os: linux
-      jdk: oraclejdk8
+#    - language: java
+#      os: linux
+#      jdk: oraclejdk8
 
-    - language: java
-      os: linux
-      jdk: openjdk7
+#    - language: java
+#      os: linux
+#      jdk: openjdk7
 
     - language: c
       os: linux
@@ -24,21 +24,29 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - liblockdev1-dev
-            - libstdc++-4.8-dev
-            - g++-4.8
-            - g++-4.8-multilib
+#            - libstdc++-4.8-dev
+#            - g++-4.8
+#            - g++-4.8-multilib
 #            - g++-4.8-multilib-arm-linux-gnueabi
-            - g++-4.8-multilib-arm-linux-gnueabihf
+#            - g++-4.8-multilib-arm-linux-gnueabihf
             - g++-mingw-w64
+            - g++-mingw-w64-i686
+            - g++-mingw-w64-x86-64
+            - g++-multilib-arm-linux-gnueabi
+            - g++-multilib-arm-linux-gnueabihf
       env:
-         - MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8"
+#         - MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8"
+#         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
       before_script:
+         - sudo apt-add-repository 'deb http://archive.ubuntu.com/ubuntu trusty main universe multiverse restricted'
+         - sudo apt-get update -qq
+         - sudo apt-get install -y g++-multilib-arm-linux-gnueabi g++-multilib-arm-linux-gnueabihf
          - cd src/main/c
       script:
-#         - make -f Makefile.ubuntu64 clean linux32
+         - make -f Makefile.ubuntu64 clean linux32
          - make -f Makefile.ubuntu64 clean linux64
          - make -f Makefile.ubuntu64 windows
-#         - make -f Makefile.ubuntu64 arm
+         - make -f Makefile.ubuntu64 arm
 
     # works on Precise and Trusty
     #- os: linux
