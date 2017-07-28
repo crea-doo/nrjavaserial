@@ -37,7 +37,7 @@ matrix:
       script:
 #         - make -f Makefile.ubuntu64 clean linux32
          - make -f Makefile.ubuntu64 clean linux64
-#         - make -f Makefile.ubuntu64 windows
+         - make -f Makefile.ubuntu64 windows
 #         - make -f Makefile.ubuntu64 arm
 
     # works on Precise and Trusty
