@@ -22,14 +22,14 @@ LINOBJ=fixup.o fuserImp.o SerialImp.o
 CCLIN32=gcc -I./include/ubuntu-multilib-fix $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m32 -MMD
 LINKLIN32=g++ -m32 -shared -Lcross-compile-libs/i386
 
-CCLIN64=gcc $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m64 -MMD
-LINKLIN64=g++ -m64 -shared -Lcross-compile-libs/amd64
+CCLIN64=gcc-4.8 $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m64 -MMD
+LINKLIN64=g++-4.8 -m64 -shared -Lcross-compile-libs/amd64
 
-CCLINARM=arm-linux-gnueabi-gcc $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
-LINKLINARM=arm-linux-gnueabi-g++ -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
+CCLINARM=arm-linux-gnueabi-gcc-4.8 $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
+LINKLINARM=arm-linux-gnueabi-g++-4.8 -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
 
-CCLINARM_HF=arm-linux-gnueabihf-gcc $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
-LINKLINARM_HF=arm-linux-gnueabihf-g++ -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
+CCLINARM_HF=arm-linux-gnueabihf-gcc-4.8 $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
+LINKLINARM_HF=arm-linux-gnueabihf-g++-4.8 -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
 
 CCLINANDROID=/home/opt/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/arm-linux-androideabi/bin/gcc $(LININCLUDE) -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MMD -MP
 LINKLINANDROID=/home/opt/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/arm-linux-androideabi/bin/g++ -shared
@@ -110,8 +110,8 @@ build/arm7HF/%.o: src/%.c
 	@mkdir -p `dirname $@`
 	$(CCLINARM_HF) -march=armv7-a -o $@ $<
 
-# ARM v6	
-	
+# ARM v6
+
 arm6: resources/native/linux/ARM/libNRJavaSerialv6.so
 
 resources/native/linux/ARM/libNRJavaSerialv6.so: $(LINOBJ:%=build/arm6/%)

@@ -18,57 +18,40 @@ matrix:
     - language: c
       os: linux
       dist: trusty
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - liblockdev1-dev
-#            - libstdc++-4.8-dev
-#            - g++-4.8
-#            - g++-4.8-multilib
-#            - g++-4.8-multilib-arm-linux-gnueabi
-#            - g++-4.8-multilib-arm-linux-gnueabihf
-            - g++-mingw-w64
-            - g++-mingw-w64-i686
-            - g++-mingw-w64-x86-64
-#            - g++-multilib-arm-linux-gnueabi
-#            - g++-multilib-arm-linux-gnueabihf
+#      addons:
+#        apt:
+#          sources:
+#            - ubuntu-toolchain-r-test
+#          packages:
+#            - liblockdev1-dev
+##            - libstdc++-4.8-dev
+##            - g++-4.8
+##            - g++-4.8-multilib
+##            - g++-4.8-multilib-arm-linux-gnueabi
+##            - g++-4.8-multilib-arm-linux-gnueabihf
+#            - g++-mingw-w64
+#            - g++-mingw-w64-i686
+#            - g++-mingw-w64-x86-64
+##            - g++-multilib-arm-linux-gnueabi
+##            - g++-multilib-arm-linux-gnueabihf
       env:
 #         - MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8"
-         - MATRIX_EVAL="CC=gcc-4.7 && CXX=g++-4.7"
+         - MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8"
       before_script:
          - sudo apt-add-repository 'deb http://archive.ubuntu.com/ubuntu trusty main universe multiverse restricted'
          - sudo apt-get update -qq
-         - sudo apt-get install -y liblockdev1-dev g++-4.7 g++-4.7-multilib g++-4.7-multilib-arm-linux-gnueabi g++-4.7-multilib-arm-linux-gnueabihf g++-mingw-w64 g++-mingw-w64-i686 g++-mingw-w64-x86-64
+         - sudo apt-get install -y liblockdev1-dev libstdc++-4.8-dev g++-4.8 g++-4.8-multilib g++-4.8-multilib-arm-linux-gnueabihf g++-mingw-w64 g++-mingw-w64-i686 g++-mingw-w64-x86-64
          - cd src/main/c
       script:
          - make -f Makefile.ubuntu64 clean linux32
          - make -f Makefile.ubuntu64 clean linux64
-         - make -f Makefile.ubuntu64 windows
-         - make -f Makefile.ubuntu64 arm
-
-    # works on Precise and Trusty
-    #- os: linux
-    #  addons:
-    #    apt:
-    #      sources:
-    #        - ubuntu-toolchain-r-test
-    #      packages:
-    #        - g++-5
-    #  env:
-    #     - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
-
-    # works on Precise and Trusty
-    #- os: linux
-    #  addons:
-    #    apt:
-    #      sources:
-    #        - ubuntu-toolchain-r-test
-    #      packages:
-    #        - g++-6
-    #  env:
-    #    - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+         - make -f Makefile.ubuntu64 clean windows32
+         - make -f Makefile.ubuntu64 clean windows64
+         - make -f Makefile.ubuntu64 clean arm7
+         - make -f Makefile.ubuntu64 clean arm7HF
+         - make -f Makefile.ubuntu64 clean arm6
+         - make -f Makefile.ubuntu64 clean arm6HF
+         - make -f Makefile.ubuntu64 clean arm5
 
 #    - os: osx
 #      osx_image: xcode8
