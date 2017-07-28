@@ -32,15 +32,15 @@ matrix:
             - g++-mingw-w64
             - g++-mingw-w64-i686
             - g++-mingw-w64-x86-64
-            - g++-multilib-arm-linux-gnueabi
-            - g++-multilib-arm-linux-gnueabihf
+#            - g++-multilib-arm-linux-gnueabi
+#            - g++-multilib-arm-linux-gnueabihf
       env:
 #         - MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8"
 #         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
       before_script:
          - sudo apt-add-repository 'deb http://archive.ubuntu.com/ubuntu trusty main universe multiverse restricted'
          - sudo apt-get update -qq
-         - sudo apt-get install -y g++-multilib-arm-linux-gnueabi g++-multilib-arm-linux-gnueabihf
+         - sudo apt-get install -y g++ g++-multilib g++-multilib-arm-linux-gnueabi g++-multilib-arm-linux-gnueabihf
          - cd src/main/c
       script:
          - make -f Makefile.ubuntu64 clean linux32
