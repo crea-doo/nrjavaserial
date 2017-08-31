@@ -10,7 +10,10 @@ include: &toolchain_amd64
         - g++-4.8
         - gcc-4.8-multilib
         - g++-4.8-multilib
-        
+        - g++-mingw-w64
+        - g++-mingw-w64-i686
+        - g++-mingw-w64-x86-64
+
 # OSX amd64 toolchain
 include: &toolchain_osx_amd64
   <<: *toolchain_amd64
@@ -19,7 +22,7 @@ include: &toolchain_osx_amd64
     - ARCH=amd64
     - GPP_COMPILER=g++
     - GCC_COMPILER=gcc
-        
+
 # linux amd64 toolchain
 include: &toolchain_linux_amd64
   <<: *toolchain_amd64
@@ -28,7 +31,7 @@ include: &toolchain_linux_amd64
     - ARCH=amd64
     - GPP_COMPILER=g++-4.8
     - GCC_COMPILER=gcc-4.8
-        
+
 # cross toolchain (used as a base for multiarch cross-compilation configurations below) 
 include: &toolchain_linux_cross
   dist: trusty
@@ -45,7 +48,7 @@ include: &toolchain_linux_armhf
     - GNU_MULTILIB_TRIPLET=arm-linux-gnueabihf
     - GPP_COMPILER=arm-linux-gnueabihf-g++
     - GCC_COMPILER=arm-linux-gnueabihf-gcc
-  
+
 # arm64 toolchain
 include: &toolchain_linux_arm64
   <<: *toolchain_linux_cross
@@ -75,15 +78,22 @@ matrix:
 #      jdk: openjdk7
 
     # Compile libs on different platforms
-#  - os: osx
-#    <<: *toolchain_osx_amd64
 #  - language: c
-#    os: linux
-#    <<: *toolchain_linux_amd64
+#    os: osx
+#    <<: *toolchain_osx_amd64
 #    before_script:
 #       - cd src/main/c
 #    script:
-#      - make -f Makefile.ubuntu64 clean linux64
+#      - make -f Makefile.ubuntu64 clean osx
+  - language: c
+    os: linux
+    <<: *toolchain_linux_amd64
+    before_script:
+       - cd src/main/c
+    script:
+      - make -f Makefile.ubuntu64 clean linux64
+      - make -f Makefile.ubuntu64 clean windows32
+      - make -f Makefile.ubuntu64 clean windows64
   - language: c
     os: linux
     <<: *toolchain_linux_armhf

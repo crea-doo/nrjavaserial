@@ -13,7 +13,7 @@
 # g++-mingw-w64
 #
 
-JDKINCLUDE=-I/usr/lib/jvm/java-7-openjdk-amd64/include/ -I/usr/lib/jvm/java-7-openjdk-i386/include/ -I"./include" -I"./include/target" -I/usr/lib/jvm/java-6-openjdk-amd64/include/ -I/usr/lib/jvm/java-6-openjdk-armhf/include/ -I/usr/lib/jvm/java-6-openjdk-arm/include/ -I/usr/lib/jvm/java-6-openjdk-i386/include/ -I/etc/alternatives/java_sdk/include -I/etc/alternatives/java_sdk/include/linux
+JDKINCLUDE=-I/usr/lib/jvm/java-8-oracle/include/ -I/usr/lib/jvm/java-7-openjdk-amd64/include/ -I/usr/lib/jvm/java-7-openjdk-i386/include/ -I"./include/" -I"./include/target/" -I/usr/lib/jvm/java-6-openjdk-amd64/include/ -I/usr/lib/jvm/java-6-openjdk-armhf/include/ -I/usr/lib/jvm/java-6-openjdk-arm/include/ -I/usr/lib/jvm/java-6-openjdk-i386/include/ -I/etc/alternatives/java_sdk/include/ -I/etc/alternatives/java_sdk/include/linux/
 
 LINOBJ=fixup.o fuserImp.o SerialImp.o
 
