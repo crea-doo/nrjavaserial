@@ -41,9 +41,9 @@ include: &toolchain_linux_cross
 include: &toolchain_linux_arm
   <<: *toolchain_linux_cross
   env:
-    - LABEL=arm_linux
+    - LABEL=armel_linux
     - CROSS_TOOLCHAIN=true
-    - ARCH=arm
+    - ARCH=armel
     - GNU_TRIPLET=arm-linux-gnueabi
     - GNU_MULTILIB_TRIPLET=arm-linux-gnueabi
     - GPP_COMPILER=arm-linux-gnueabi-g++
