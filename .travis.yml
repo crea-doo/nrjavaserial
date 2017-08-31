@@ -77,17 +77,17 @@ include: &toolchain_linux_arm64
 matrix:
   include:
     # Compile Java as usual
-#    - language: java
-#      os: linux
-#      jdk: oraclejdk7
+    - language: java
+      os: linux
+      jdk: oraclejdk7
 
-#    - language: java
-#      os: linux
-#      jdk: oraclejdk8
+    - language: java
+      os: linux
+      jdk: oraclejdk8
 
-#    - language: java
-#      os: linux
-#      jdk: openjdk7
+    - language: java
+      os: linux
+      jdk: openjdk7
 
     # Compile libs on different platforms
 #  - language: c
@@ -109,15 +109,16 @@ matrix:
       - make -f Makefile.ubuntu64 clean windows32
       - make -f Makefile.ubuntu64 clean windows64
 
-  - language: c
-    os: linux
-    <<: *toolchain_linux_arm
-    before_script:
-       - cd src/main/c
-    script:
-      - make -f Makefile.ubuntu64 clean arm5
-      - make -f Makefile.ubuntu64 clean arm6
-      - make -f Makefile.ubuntu64 clean arm7
+    # Seems package installation of 'g++-4.8-arm-linux-gnueabi' currently not supported on Travis
+#  - language: c
+#    os: linux
+#    <<: *toolchain_linux_arm
+#    before_script:
+#       - cd src/main/c
+#    script:
+#      - make -f Makefile.ubuntu64 clean arm5
+#      - make -f Makefile.ubuntu64 clean arm6
+#      - make -f Makefile.ubuntu64 clean arm7
 
   - language: c
     os: linux

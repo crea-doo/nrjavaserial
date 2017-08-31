@@ -7,9 +7,9 @@
 #
 # You'll need to have the following packages installed (Ubuntu wily):
 #
-# g++-5-multilib
-# g++-5-multilib-arm-linux-gnueabi
-# g++-5-multilib-arm-linux-gnueabihf
+# g++-multilib
+# g++-multilib-arm-linux-gnueabi
+# g++-multilib-arm-linux-gnueabihf
 # g++-mingw-w64
 #
 
@@ -23,14 +23,11 @@ LINKLIN32=g++ -m32 -shared -Lcross-compile-libs/x86_32
 CCLIN64=gcc $(JDKINCLUDE) -DUUCP -O3 -Wall -c -fmessage-length=0 -fPIC -m64 -MMD
 LINKLIN64=g++ -m64 -shared
 
-CCLINARM=arm-linux-gnueabi-gcc-5 $(JDKINCLUDE) -DUUCP -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
-LINKLINARM=arm-linux-gnueabi-g++-5 -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
+CCLINARM=arm-linux-gnueabi-gcc $(JDKINCLUDE) -DUUCP -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
+LINKLINARM=arm-linux-gnueabi-g++ -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
 
-CCLINARM_HF=arm-linux-gnueabihf-gcc-5 $(JDKINCLUDE) -DUUCP -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
-LINKLINARM_HF=arm-linux-gnueabihf-g++-5 -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
-
-CCLINANDROID=/home/opt/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/arm-linux-androideabi/bin/gcc $(LININCLUDE) -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MMD -MP
-LINKLINANDROID=/home/opt/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/arm-linux-androideabi/bin/g++ -shared
+CCLINARM_HF=arm-linux-gnueabihf-gcc $(JDKINCLUDE) -DUUCP -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
+LINKLINARM_HF=arm-linux-gnueabihf-g++ -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
 
 WINOBJ=windows/init.o windows/termios.o fixup.o fuserImp.o SerialImp.o
 
@@ -43,8 +40,8 @@ CCWIN64N = x86_64-w64-mingw32-gcc $(WININCLUDE64N) -c
 LINKWIN64N = x86_64-w64-mingw32-g++ -static-libgcc -static-libstdc++ -Wl,--add-stdcall-alias -shared
 
 all:
-	echo "Specify a system: make linux, make windows, make osx"
-	
+	echo "Specify a system: make linux, make windows, make arm"
+
 
 # Linux (x86[_64] and ARM)
 
