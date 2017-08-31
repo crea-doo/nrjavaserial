@@ -101,7 +101,6 @@ matrix:
       - make -f Makefile.ubuntu64 clean linux32
 
 before_install:
-  - eval "${LABEL}"
   - export CXX="${GPP_COMPILER}" CC="${GCC_COMPILER}";
   - if [[ "${CROSS_TOOLCHAIN}" == "true" ]]; then
       sudo rm -rf /etc/apt/sources.list.d/**;
