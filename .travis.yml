@@ -80,31 +80,31 @@ matrix:
   - language: c
     os: linux
     <<: *toolchain_linux_amd64
-    env:
-      - MATRIX_EVAL="LABEL=${LABEL} && CC=${GCC_COMPILER} && CXX=${GPP_COMPILER}"
     before_script:
        - cd src/main/c
     script:
       - make -f Makefile.ubuntu64 clean linux64
+    env:
+      - MATRIX_EVAL="LABEL=${LABEL} && CC=${GCC_COMPILER} && CXX=${GPP_COMPILER}"
   - language: c
     os: linux
     <<: *toolchain_linux_armhf
-    env:
-      - MATRIX_EVAL="LABEL=${LABEL} && CC=${GCC_COMPILER} && CXX=${GPP_COMPILER}"
     before_script:
        - cd src/main/c
     script:
       - make -f Makefile.ubuntu64 clean arm7HF
       - make -f Makefile.ubuntu64 clean arm6HF
+    env:
+      - MATRIX_EVAL="LABEL=${LABEL} && CC=${GCC_COMPILER} && CXX=${GPP_COMPILER}"
   - language: c
     os: linux
     <<: *toolchain_linux_arm64
-    env:
-      - MATRIX_EVAL="LABEL=${LABEL} && CC=${GCC_COMPILER} && CXX=${GPP_COMPILER}"
     before_script:
        - cd src/main/c
     script:
       - make -f Makefile.ubuntu64 clean linux32
+    env:
+      - MATRIX_EVAL="LABEL=${LABEL} && CC=${GCC_COMPILER} && CXX=${GPP_COMPILER}"
 
 before_install:
   - eval "${MATRIX_EVAL}"
