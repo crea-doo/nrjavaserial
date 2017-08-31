@@ -1,5 +1,64 @@
-sudo: required
+# amd64 toolchain (used as a base for non-sudo compilation, which is faster) 
+include: &toolchain_amd64
+  sudo: false
+  addons:
+    apt:
+      sources:
+        - ubuntu-toolchain-r-test
+      packages:
+        - gcc-4.9
+        - g++-4.9
+        - gcc-4.9-multilib
+        - g++-4.9-multilib
+        
+# OSX amd64 toolchain
+include: &toolchain_osx_amd64
+  <<: *toolchain_amd64
+  env:
+    - LABEL=amd64_osx
+    - ARCH=amd64
+    - GPP_COMPILER=g++
+    - GCC_COMPILER=gcc
+        
+# linux amd64 toolchain
+include: &toolchain_linux_amd64
+  <<: *toolchain_amd64
+  env:
+    - LABEL=amd64_linux
+    - ARCH=amd64
+    - GPP_COMPILER=g++-4.9
+    - GCC_COMPILER=gcc-4.9
+        
+# cross toolchain (used as a base for multiarch cross-compilation configurations below) 
+include: &toolchain_linux_cross
+  dist: trusty
+  sudo: required # for dpkg --add-architecture locking
+  
+# armhf toolchain
+include: &toolchain_linux_armhf
+  <<: *toolchain_linux_cross
+  env:
+    - LABEL=armhf_linux
+    - CROSS_TOOLCHAIN=true
+    - ARCH=armhf
+    - GNU_TRIPLET=arm-linux-gnueabihf
+    - GNU_MULTILIB_TRIPLET=arm-linux-gnueabihf
+    - GPP_COMPILER=arm-linux-gnueabihf-g++
+    - GCC_COMPILER=arm-linux-gnueabihf-gcc
+  
+# arm64 toolchain
+include: &toolchain_linux_arm64
+  <<: *toolchain_linux_cross
+  env:
+    - LABEL=arm64_linux
+    - CROSS_TOOLCHAIN=true
+    - ARCH=arm64
+    - GNU_TRIPLET=aarch64-linux-gnu
+    - GNU_MULTILIB_TRIPLET=arm-linux-gnueabihf
+    - GPP_COMPILER=aarch64-linux-gnu-g++
+    - GCC_COMPILER=aarch64-linux-gnu-gcc
 
+# Travis CI build matrix.  Each entry below will trigger an extra, parallel build on Travis.
 matrix:
   include:
     # Compile Java as usual
@@ -15,58 +74,37 @@ matrix:
 #      os: linux
 #      jdk: openjdk7
 
-    - language: c
-      os: linux
-      dist: trusty
-#      addons:
-#        apt:
-#          sources:
-#            - ubuntu-toolchain-r-test
-#          packages:
-#            - liblockdev1-dev
-##            - libstdc++-4.8-dev
-##            - g++-4.8
-##            - g++-4.8-multilib
-##            - g++-4.8-multilib-arm-linux-gnueabi
-##            - g++-4.8-multilib-arm-linux-gnueabihf
-#            - g++-mingw-w64
-#            - g++-mingw-w64-i686
-#            - g++-mingw-w64-x86-64
-##            - g++-multilib-arm-linux-gnueabi
-##            - g++-multilib-arm-linux-gnueabihf
-      env:
-#         - MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8"
-         - MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8"
-      before_script:
-         - sudo apt-add-repository 'deb http://archive.ubuntu.com/ubuntu trusty main universe multiverse restricted'
-         - sudo apt-get update -qq
-         - sudo apt-get install -y liblockdev1-dev libstdc++-4.8-dev g++-4.8 g++-4.8-multilib g++-4.8-multilib-arm-linux-gnueabihf g++-mingw-w64 g++-mingw-w64-i686 g++-mingw-w64-x86-64
-         - cd src/main/c
-      script:
-         - make -f Makefile.ubuntu64 clean linux32
-         - make -f Makefile.ubuntu64 clean linux64
-         - make -f Makefile.ubuntu64 clean windows32
-         - make -f Makefile.ubuntu64 clean windows64
-         - make -f Makefile.ubuntu64 clean arm7
-         - make -f Makefile.ubuntu64 clean arm7HF
-         - make -f Makefile.ubuntu64 clean arm6
-         - make -f Makefile.ubuntu64 clean arm6HF
-         - make -f Makefile.ubuntu64 clean arm5
-
-#    - os: osx
-#      osx_image: xcode8
-#      env:
-#        - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
-
-#    - os: osx
-#      osx_image: xcode8
-#      env:
-#        - MATRIX_EVAL="brew install gcc5 && CC=gcc-5 && CXX=g++-5"
-
-#    - os: osx
-#      osx_image: xcode8
-#      env:
-#        - MATRIX_EVAL="brew install gcc && CC=gcc-6 && CXX=g++-6"
+    # Compile libs on different platforms
+#  - os: osx
+#    <<: *toolchain_osx_amd64
+  - os: linux
+    <<: *toolchain_linux_amd64
+    script:
+      - make -f Makefile.ubuntu64 clean linux64
+    env:
+      - MATRIX_EVAL="LABEL=${LABEL} && CC=${GCC_COMPILER} && CXX=${GPP_COMPILER}"
+  - os: linux
+    <<: *toolchain_linux_armhf
+    script:
+      - make -f Makefile.ubuntu64 clean arm7HF
+      - make -f Makefile.ubuntu64 clean arm6HF
+  - os: linux
+    <<: *toolchain_linux_arm64
+    script:
+      - make -f Makefile.ubuntu64 clean linux32
+    env:
+      - MATRIX_EVAL="LABEL=${LABEL} && CC=${GCC_COMPILER} && CXX=${GPP_COMPILER}"
 
 before_install:
-    - eval "${MATRIX_EVAL}"
+  - eval "${MATRIX_EVAL}"
+  - export CXX="${GPP_COMPILER}" CC="${GCC_COMPILER}";
+  - if [[ "${CROSS_TOOLCHAIN}" == "true" ]]; then
+      sudo rm -rf /etc/apt/sources.list.d/**;
+      sudo rm /etc/apt/sources.list; 
+      echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu xenial main universe multiverse restricted" | sudo tee /etc/apt/sources.list;
+      echo "deb [arch=${ARCH}] http://ports.ubuntu.com/ubuntu-ports xenial main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list;
+      echo "deb-src http://archive.ubuntu.com/ubuntu xenial main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list;
+      sudo dpkg --add-architecture ${ARCH};
+      sudo apt-get update -yq;
+      sudo apt-get install -y gcc-${GNU_TRIPLET} g++-${GNU_TRIPLET} pkg-config-${GNU_TRIPLET} crossbuild-essential-${ARCH} g++-multilib-${GNU_MULTILIB_TRIPLET} gcc-multilib-${GNU_MULTILIB_TRIPLET} dpkg-dev libgcc1 libgcc1:${ARCH} libc6 libc6:${ARCH} libc6-dev:${ARCH};
+    fi
