@@ -76,25 +76,26 @@ include: &toolchain_linux_arm64
 # Travis CI build matrix.  Each entry below will trigger an extra, parallel build on Travis.
 matrix:
   include:
-    # Compile Java as usual
-    - language: java
-      os: linux
-      jdk: oraclejdk7
 
-    - language: java
-      os: linux
-      jdk: oraclejdk8
+  # Compile Java as usual
+  - language: java
+    os: linux
+    jdk: oraclejdk7
 
-    - language: java
-      os: linux
-      jdk: openjdk7
+  - language: java
+    os: linux
+    jdk: oraclejdk8
 
-    # Compile libs on different platforms
+  - language: java
+    os: linux
+    jdk: openjdk7
+
+  # Compile libs on different platforms
 #  - language: c
 #    os: osx
 #    <<: *toolchain_osx_amd64
 #    before_script:
-#       - cd src/main/c
+#      - cd src/main/c
 #    script:
 #      - make -f Makefile.ubuntu64 clean osx
 
@@ -102,7 +103,7 @@ matrix:
     os: linux
     <<: *toolchain_linux_amd64
     before_script:
-       - cd src/main/c
+      - cd src/main/c
     script:
       - make -f Makefile.ubuntu64 clean linux32
       - make -f Makefile.ubuntu64 clean linux64
@@ -114,7 +115,7 @@ matrix:
 #    os: linux
 #    <<: *toolchain_linux_arm
 #    before_script:
-#       - cd src/main/c
+#      - cd src/main/c
 #    script:
 #      - make -f Makefile.ubuntu64 clean arm5
 #      - make -f Makefile.ubuntu64 clean arm6
@@ -124,7 +125,7 @@ matrix:
     os: linux
     <<: *toolchain_linux_armhf
     before_script:
-       - cd src/main/c
+      - cd src/main/c
     script:
       - make -f Makefile.ubuntu64 clean arm6HF
       - make -f Makefile.ubuntu64 clean arm7HF
@@ -133,7 +134,7 @@ matrix:
 #    os: linux
 #    <<: *toolchain_linux_arm64
 #    before_script:
-#       - cd src/main/c
+#      - cd src/main/c
 #    script:
 #      - make -f Makefile.ubuntu64 clean linux32
 
