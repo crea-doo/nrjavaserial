@@ -80,15 +80,7 @@ matrix:
   # Compile Java as usual
   - language: java
     os: linux
-    jdk: oraclejdk7
-
-  - language: java
-    os: linux
     jdk: oraclejdk8
-
-  - language: java
-    os: linux
-    jdk: openjdk7
 
   # Compile libs on different platforms
 #  - language: c
