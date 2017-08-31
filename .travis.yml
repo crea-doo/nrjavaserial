@@ -6,10 +6,10 @@ include: &toolchain_amd64
       sources:
         - ubuntu-toolchain-r-test
       packages:
-        - gcc-4.9
-        - g++-4.9
-        - gcc-4.9-multilib
-        - g++-4.9-multilib
+        - gcc-4.8
+        - g++-4.8
+        - gcc-4.8-multilib
+        - g++-4.8-multilib
         
 # OSX amd64 toolchain
 include: &toolchain_osx_amd64
@@ -26,8 +26,8 @@ include: &toolchain_linux_amd64
   env:
     - LABEL=amd64_linux
     - ARCH=amd64
-    - GPP_COMPILER=g++-4.9
-    - GCC_COMPILER=gcc-4.9
+    - GPP_COMPILER=g++-4.8
+    - GCC_COMPILER=gcc-4.8
         
 # cross toolchain (used as a base for multiarch cross-compilation configurations below) 
 include: &toolchain_linux_cross
@@ -110,5 +110,5 @@ before_install:
       echo "deb-src http://archive.ubuntu.com/ubuntu xenial main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list;
       sudo dpkg --add-architecture ${ARCH};
       sudo apt-get update -yq;
-      sudo apt-get install -y gcc-4.9-${GNU_TRIPLET} g++-4.9-${GNU_TRIPLET} pkg-config-${GNU_TRIPLET} crossbuild-essential-${ARCH} g++-4.9-multilib-${GNU_MULTILIB_TRIPLET} gcc-multilib-4.9-${GNU_MULTILIB_TRIPLET} libgcc1 libgcc1:${ARCH};
+      sudo apt-get install -y gcc-4.8-${GNU_TRIPLET} g++-4.8-${GNU_TRIPLET} crossbuild-essential-${ARCH} g++-4.8-multilib-${GNU_MULTILIB_TRIPLET} gcc-multilib-4.8-${GNU_MULTILIB_TRIPLET} libgcc1 libgcc1:${ARCH};
     fi
