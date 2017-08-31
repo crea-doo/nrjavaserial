@@ -77,13 +77,13 @@ matrix:
     # Compile libs on different platforms
 #  - os: osx
 #    <<: *toolchain_osx_amd64
-  - language: c
-    os: linux
-    <<: *toolchain_linux_amd64
-    before_script:
-       - cd src/main/c
-    script:
-      - make -f Makefile.ubuntu64 clean linux64
+#  - language: c
+#    os: linux
+#    <<: *toolchain_linux_amd64
+#    before_script:
+#       - cd src/main/c
+#    script:
+#      - make -f Makefile.ubuntu64 clean linux64
   - language: c
     os: linux
     <<: *toolchain_linux_armhf
