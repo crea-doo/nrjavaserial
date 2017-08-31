@@ -82,6 +82,18 @@ matrix:
     os: linux
     jdk: oraclejdk8
 
+  - language: java
+    os: linux
+    jdk: openjdk7
+    script:
+      - gradle build
+
+  - language: java
+    os: linux
+    jdk: openjdk6
+    script:
+      - gradle build
+
   # Compile libs on different platforms
 #  - language: c
 #    os: osx
