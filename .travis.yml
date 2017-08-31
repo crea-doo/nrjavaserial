@@ -146,5 +146,5 @@ before_install:
       echo "deb-src http://archive.ubuntu.com/ubuntu xenial main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list;
       sudo dpkg --add-architecture ${ARCH};
       sudo apt-get update -yq;
-      sudo apt-get install -y g++-4.8-${GNU_TRIPLET} crossbuild-essential-${ARCH} g++-4.8-multilib-${GNU_MULTILIB_TRIPLET} libgcc1 libgcc1:${ARCH};
+      sudo apt-get install -y g++-4.8-${GNU_TRIPLET} crossbuild-essential-${ARCH} g++-4.8-multilib-${GNU_MULTILIB_TRIPLET};
     fi
