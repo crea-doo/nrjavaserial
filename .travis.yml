@@ -110,5 +110,5 @@ before_install:
       echo "deb-src http://archive.ubuntu.com/ubuntu xenial main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list;
       sudo dpkg --add-architecture ${ARCH};
       sudo apt-get update -yq;
-      sudo apt-get install -y gcc-4.9-${GNU_TRIPLET} g++-4.9-${GNU_TRIPLET} pkg-config-${GNU_TRIPLET} crossbuild-essential-${ARCH} g++-4.9-multilib-${GNU_MULTILIB_TRIPLET} gcc-multilib-4.9-${GNU_MULTILIB_TRIPLET} libgcc1 libgcc1:${ARCH} g++-mingw-w64 g++-mingw-w64-i686 g++-mingw-w64-x86-64;
+      sudo apt-get install -y gcc-4.9-${GNU_TRIPLET} g++-4.9-${GNU_TRIPLET} pkg-config-${GNU_TRIPLET} crossbuild-essential-${ARCH} g++-4.9-multilib-${GNU_MULTILIB_TRIPLET} gcc-multilib-4.9-${GNU_MULTILIB_TRIPLET} libgcc1 libgcc1:${ARCH};
     fi
