@@ -104,6 +104,7 @@ matrix:
     before_script:
        - cd src/main/c
     script:
+      - make -f Makefile.ubuntu64 clean linux32
       - make -f Makefile.ubuntu64 clean linux64
       - make -f Makefile.ubuntu64 clean windows32
       - make -f Makefile.ubuntu64 clean windows64
@@ -127,13 +128,13 @@ matrix:
       - make -f Makefile.ubuntu64 clean arm6HF
       - make -f Makefile.ubuntu64 clean arm7HF
 
-  - language: c
-    os: linux
-    <<: *toolchain_linux_arm64
-    before_script:
-       - cd src/main/c
-    script:
-      - make -f Makefile.ubuntu64 clean linux32
+#  - language: c
+#    os: linux
+#    <<: *toolchain_linux_arm64
+#    before_script:
+#       - cd src/main/c
+#    script:
+#      - make -f Makefile.ubuntu64 clean linux32
 
 before_install:
   - export CXX="${GPP_COMPILER}" CC="${GCC_COMPILER}";
