@@ -85,14 +85,12 @@ matrix:
   - language: java
     os: linux
     jdk: openjdk7
-    script:
-      - gradle build
+    install: gradle assemble
 
   - language: java
     os: linux
     jdk: openjdk6
-    script:
-      - gradle build
+    install: gradle assemble
 
   # Compile libs on different platforms
 #  - language: c
