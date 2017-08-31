@@ -35,12 +35,12 @@ LINKLINANDROID=/home/opt/android-ndk-r5b/toolchains/arm-linux-androideabi-4.4.3/
 WINOBJ=windows/init.o windows/termios.o fixup.o fuserImp.o SerialImp.o
 
 WININCLUDE32N=-I./include -I./include/target -I./include/windows -I./include/windows/win32 $(JDKINCLUDE)
-CCWIN32N = i686-w64-mingw32-gcc-win32 $(WININCLUDE32N) -c
-LINKWIN32N = i686-w64-mingw32-g++-win32 -static-libgcc -static-libstdc++ -Wl,--add-stdcall-alias -shared
+CCWIN32N = i686-w64-mingw32-gcc $(WININCLUDE32N) -c
+LINKWIN32N = i686-w64-mingw32-g++ -static-libgcc -static-libstdc++ -Wl,--add-stdcall-alias -shared
 
 WININCLUDE64N=-I./include -I./include/target -I./include/windows -I./include/windows/win32 $(JDKINCLUDE)
-CCWIN64N = x86_64-w64-mingw32-gcc-win32 $(WININCLUDE64N) -c
-LINKWIN64N = x86_64-w64-mingw32-g++-win32 -static-libgcc -static-libstdc++ -Wl,--add-stdcall-alias -shared
+CCWIN64N = x86_64-w64-mingw32-gcc $(WININCLUDE64N) -c
+LINKWIN64N = x86_64-w64-mingw32-g++ -static-libgcc -static-libstdc++ -Wl,--add-stdcall-alias -shared
 
 all:
 	echo "Specify a system: make linux, make windows, make osx"

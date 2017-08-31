@@ -37,6 +37,18 @@ include: &toolchain_linux_cross
   dist: trusty
   sudo: required # for dpkg --add-architecture locking
   
+# arm toolchain
+include: &toolchain_linux_arm
+  <<: *toolchain_linux_cross
+  env:
+    - LABEL=arm_linux
+    - CROSS_TOOLCHAIN=true
+    - ARCH=arm
+    - GNU_TRIPLET=arm-linux-gnueabi
+    - GNU_MULTILIB_TRIPLET=arm-linux-gnueabi
+    - GPP_COMPILER=arm-linux-gnueabi-g++
+    - GCC_COMPILER=arm-linux-gnueabi-gcc
+  
 # armhf toolchain
 include: &toolchain_linux_armhf
   <<: *toolchain_linux_cross
@@ -85,6 +97,7 @@ matrix:
 #       - cd src/main/c
 #    script:
 #      - make -f Makefile.ubuntu64 clean osx
+
   - language: c
     os: linux
     <<: *toolchain_linux_amd64
@@ -94,14 +107,26 @@ matrix:
       - make -f Makefile.ubuntu64 clean linux64
       - make -f Makefile.ubuntu64 clean windows32
       - make -f Makefile.ubuntu64 clean windows64
+
+  - language: c
+    os: linux
+    <<: *toolchain_linux_arm
+    before_script:
+       - cd src/main/c
+    script:
+      - make -f Makefile.ubuntu64 clean arm5
+      - make -f Makefile.ubuntu64 clean arm6
+      - make -f Makefile.ubuntu64 clean arm7
+
   - language: c
     os: linux
     <<: *toolchain_linux_armhf
     before_script:
        - cd src/main/c
     script:
-      - make -f Makefile.ubuntu64 clean arm7HF
       - make -f Makefile.ubuntu64 clean arm6HF
+      - make -f Makefile.ubuntu64 clean arm7HF
+
   - language: c
     os: linux
     <<: *toolchain_linux_arm64
