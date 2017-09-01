@@ -16,16 +16,16 @@ JDKINCLUDE=-I/usr/lib/jvm/java-8-oracle/include/ -I/usr/lib/jvm/java-7-openjdk-a
 
 LINOBJ=fixup.o fuserImp.o SerialImp.o
 
-CCLIN32=gcc -I./include/ubuntu-multilib-fix/ $(JDKINCLUDE) -I./cross-compile-libs/i386/ -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m32 -MMD
+CCLIN32=gcc -I./include/ubuntu-multilib-fix/ $(JDKINCLUDE) -I./cross-compile-libs/i386/ -L./cross-compile-libs/i386 -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m32 -MMD
 LINKLIN32=g++ -m32 -shared -L./cross-compile-libs/i386
 
-CCLIN64=gcc-4.8 $(JDKINCLUDE) -I./cross-compile-libs/amd64/ -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m64 -MMD
+CCLIN64=gcc-4.8 $(JDKINCLUDE) -I./cross-compile-libs/amd64/ -L./cross-compile-libs/amd64 -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m64 -MMD
 LINKLIN64=g++-4.8 -m64 -shared -L./cross-compile-libs/amd64
 
-CCLINARM=arm-linux-gnueabi-gcc $(JDKINCLUDE) -I./cross-compile-libs/armel/ -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
+CCLINARM=arm-linux-gnueabi-gcc $(JDKINCLUDE) -I./cross-compile-libs/armel/ -L./cross-compile-libs/armel -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
 LINKLINARM=arm-linux-gnueabi-g++ -shared -fPIC -nostdlib -L./cross-compile-libs/armel
 
-CCLINARM_HF=arm-linux-gnueabihf-gcc $(JDKINCLUDE) -I./cross-compile-libs/armhf/ -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
+CCLINARM_HF=arm-linux-gnueabihf-gcc $(JDKINCLUDE) -I./cross-compile-libs/armhf/ -L./cross-compile-libs/armhf -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
 LINKLINARM_HF=arm-linux-gnueabihf-g++ -shared -fPIC -nostdlib -L./cross-compile-libs/armhf
 
 WINOBJ=windows/init.o windows/termios.o fixup.o fuserImp.o SerialImp.o
