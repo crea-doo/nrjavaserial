@@ -41,7 +41,7 @@ include: &toolchain_linux_cross
 include: &toolchain_linux_arm
   <<: *toolchain_linux_cross
   env:
-    - LABEL=armel_linux
+    - LABEL=arm_linux
     - CROSS_TOOLCHAIN=true
     - ARCH=arm
     - GNU_VERSION=4.7
@@ -113,6 +113,7 @@ matrix:
       - make -f Makefile.ubuntu64 clean windows64
 
     # Seems only package installation of 'g++-4.7-arm-linux-gnueabi' currently supported on Travis (not 4.8)
+    # See https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-trusty
   - language: c
     os: linux
     <<: *toolchain_linux_arm
@@ -150,5 +151,10 @@ before_install:
       echo "deb-src http://archive.ubuntu.com/ubuntu xenial main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list;
       sudo dpkg --add-architecture ${ARCH};
       sudo apt-get update -yq;
-      sudo apt-get install -y g++-${GNU_VERSION}-${GNU_TRIPLET} crossbuild-essential-${ARCH} g++-${GNU_VERSION}-multilib-${GNU_MULTILIB_TRIPLET};
+      sudo apt-get install -y g++-${GNU_VERSION}-${GNU_TRIPLET} g++-${GNU_VERSION}-multilib-${GNU_MULTILIB_TRIPLET};
+      if [[ "${ARCH}" == "arm" ]]; then
+        sudo apt-get install -y crossbuild-essential-armel;
+      else
+        sudo apt-get install -y crossbuild-essential-${ARCH};
+      fi
     fi
