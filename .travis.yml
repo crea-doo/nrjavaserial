@@ -13,8 +13,6 @@ include: &toolchain_amd64
         - g++-mingw-w64
         - g++-mingw-w64-i686
         - g++-mingw-w64-x86-64
-        - liblockdev1-dev
-        - liblockdev1-dev:i386
 
 # OSX amd64 toolchain
 include: &toolchain_osx_amd64
@@ -153,7 +151,7 @@ before_install:
       echo "deb-src http://archive.ubuntu.com/ubuntu xenial main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list;
       sudo dpkg --add-architecture ${ARCH};
       sudo apt-get update -yq;
-      sudo apt-get install -y g++-${GNU_VERSION}-${GNU_TRIPLET} g++-${GNU_VERSION}-multilib-${GNU_MULTILIB_TRIPLET} liblockdev1-dev;
+      sudo apt-get install -y g++-${GNU_VERSION}-${GNU_TRIPLET} g++-${GNU_VERSION}-multilib-${GNU_MULTILIB_TRIPLET};
       if [[ "${ARCH}" == "arm" ]]; then
         sudo apt-get install -y crossbuild-essential-armel;
       else
