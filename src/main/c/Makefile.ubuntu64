@@ -20,16 +20,16 @@ LOCKDEVINCLUDE=-I./include/lockdev/
 LINOBJ=fixup.o fuserImp.o SerialImp.o
 
 CCLIN32=gcc -I./include/ubuntu-multilib-fix/ $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m32 -MMD
-LINKLIN32=g++ -m32 -shared
+LINKLIN32=g++ -m32 -shared -L./cross-compile-libs/i386/
 
 CCLIN64=gcc-4.8 $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m64 -MMD
-LINKLIN64=g++-4.8 -m64 -shared
+LINKLIN64=g++-4.8 -m64 -shared -L./cross-compile-libs/amd64/
 
 CCLINARM=arm-linux-gnueabi-gcc $(JDKINCLUDE) $(LOCKDEVINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
-LINKLINARM=arm-linux-gnueabi-g++ -shared -fPIC -nostdlib
+LINKLINARM=arm-linux-gnueabi-g++ -shared -fPIC -nostdlib -L./cross-compile-libs/armel/
 
 CCLINARM_HF=arm-linux-gnueabihf-gcc $(JDKINCLUDE) $(LOCKDEVINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
-LINKLINARM_HF=arm-linux-gnueabihf-g++ -shared -fPIC -nostdlib
+LINKLINARM_HF=arm-linux-gnueabihf-g++ -shared -fPIC -nostdlib -L./cross-compile-libs/armhf/
 
 WINOBJ=windows/init.o windows/termios.o fixup.o fuserImp.o SerialImp.o
 

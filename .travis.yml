@@ -153,7 +153,7 @@ before_install:
       echo "deb-src http://archive.ubuntu.com/ubuntu xenial main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list;
       sudo dpkg --add-architecture ${ARCH};
       sudo apt-get update -yq;
-      sudo apt-get install -y g++-${GNU_VERSION}-${GNU_TRIPLET} g++-${GNU_VERSION}-multilib-${GNU_MULTILIB_TRIPLET} liblockdev1-dev liblockdev1-dev:${ARCH};
+      sudo apt-get install -y g++-${GNU_VERSION}-${GNU_TRIPLET} g++-${GNU_VERSION}-multilib-${GNU_MULTILIB_TRIPLET} liblockdev1-dev;
       if [[ "${ARCH}" == "arm" ]]; then
         sudo apt-get install -y crossbuild-essential-armel;
       else
