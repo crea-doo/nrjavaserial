@@ -11,23 +11,24 @@
 # g++-multilib-arm-linux-gnueabi
 # g++-multilib-arm-linux-gnueabihf
 # g++-mingw-w64
+# liblockdev1-dev
 #
 
 JDKINCLUDE=-I/usr/lib/jvm/java-8-oracle/include/ -I/usr/lib/jvm/java-7-openjdk-amd64/include/ -I/usr/lib/jvm/java-7-openjdk-i386/include/ -I"./include/" -I"./include/target/" -I/usr/lib/jvm/java-6-openjdk-amd64/include/ -I/usr/lib/jvm/java-6-openjdk-armhf/include/ -I/usr/lib/jvm/java-6-openjdk-arm/include/ -I/usr/lib/jvm/java-6-openjdk-i386/include/ -I/etc/alternatives/java_sdk/include/ -I/etc/alternatives/java_sdk/include/linux/
 
 LINOBJ=fixup.o fuserImp.o SerialImp.o
 
-CCLIN32=gcc -I./include/ubuntu-multilib-fix $(JDKINCLUDE) -DUUCP -O3 -Wall -c -fmessage-length=0 -fPIC -m32 -MMD
-LINKLIN32=g++ -m32 -shared -Lcross-compile-libs/x86_32
+CCLIN32=gcc -I./include/ubuntu-multilib-fix $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m32 -MMD
+LINKLIN32=g++ -m32 -shared -Lcross-compile-libs/i386
 
-CCLIN64=gcc $(JDKINCLUDE) -DUUCP -O3 -Wall -c -fmessage-length=0 -fPIC -m64 -MMD
-LINKLIN64=g++ -m64 -shared
+CCLIN64=gcc-4.8 $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m64 -MMD
+LINKLIN64=g++-4.8 -m64 -shared -Lcross-compile-libs/amd64
 
-CCLINARM=arm-linux-gnueabi-gcc $(JDKINCLUDE) -DUUCP -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
-LINKLINARM=arm-linux-gnueabi-g++ -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
+CCLINARM=arm-linux-gnueabi-gcc $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
+LINKLINARM=arm-linux-gnueabi-g++ -shared -fPIC -nostdlib -Lcross-compile-libs/arm
 
-CCLINARM_HF=arm-linux-gnueabihf-gcc $(JDKINCLUDE) -DUUCP -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
-LINKLINARM_HF=arm-linux-gnueabihf-g++ -shared -fPIC -nostdlib -Lcross-compile-libs/ARM
+CCLINARM_HF=arm-linux-gnueabihf-gcc $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
+LINKLINARM_HF=arm-linux-gnueabihf-g++ -shared -fPIC -nostdlib -Lcross-compile-libs/armhf
 
 WINOBJ=windows/init.o windows/termios.o fixup.o fuserImp.o SerialImp.o
 
@@ -56,7 +57,7 @@ linux32: resources/native/linux/x86_32/libNRJavaSerial.so
 
 resources/native/linux/x86_32/libNRJavaSerial.so: $(LINOBJ:%=build/linux32/%)
 	@mkdir -p `dirname $@`
-	$(LINKLIN32) -o $@ $^
+	$(LINKLIN32) -o $@ $^ -llockdev
 
 build/linux32/%.o: src/%.c
 	@mkdir -p `dirname $@`
@@ -68,7 +69,7 @@ linux64: resources/native/linux/x86_64/libNRJavaSerial.so
 
 resources/native/linux/x86_64/libNRJavaSerial.so: $(LINOBJ:%=build/linux64/%)
 	@mkdir -p `dirname $@`
-	$(LINKLIN64) -o $@ $^
+	$(LINKLIN64) -o $@ $^ -llockdev
 
 build/linux64/%.o: src/%.c
 	@mkdir -p `dirname $@`
@@ -87,7 +88,7 @@ arm7: resources/native/linux/ARM/libNRJavaSerial.so
 
 resources/native/linux/ARM/libNRJavaSerial.so: $(LINOBJ:%=build/arm7/%)
 	@mkdir -p `dirname $@`
-	$(LINKLINARM) -march=armv7-a -o $@ $^
+	$(LINKLINARM) -march=armv7-a -o $@ $^ -llockdev
 
 build/arm7/%.o: src/%.c
 	@mkdir -p `dirname $@`
@@ -99,19 +100,19 @@ arm7HF: resources/native/linux/ARM/libNRJavaSerial_HF.so
 
 resources/native/linux/ARM/libNRJavaSerial_HF.so: $(LINOBJ:%=build/arm7HF/%)
 	@mkdir -p `dirname $@`
-	$(LINKLINARM_HF) -march=armv7-a -o $@ $^
+	$(LINKLINARM_HF) -march=armv7-a -o $@ $^ -llockdev
 
 build/arm7HF/%.o: src/%.c
 	@mkdir -p `dirname $@`
 	$(CCLINARM_HF) -march=armv7-a -o $@ $<
 
-# ARM v6	
-	
+# ARM v6
+
 arm6: resources/native/linux/ARM/libNRJavaSerialv6.so
 
 resources/native/linux/ARM/libNRJavaSerialv6.so: $(LINOBJ:%=build/arm6/%)
 	@mkdir -p `dirname $@`
-	$(LINKLINARM) -march=armv6 -o $@ $^
+	$(LINKLINARM) -march=armv6 -o $@ $^ -llockdev
 
 build/arm6/%.o: src/%.c
 	@mkdir -p `dirname $@`
@@ -123,7 +124,7 @@ arm6HF: resources/native/linux/ARM/libNRJavaSerialv6_HF.so
 
 resources/native/linux/ARM/libNRJavaSerialv6_HF.so: $(LINOBJ:%=build/arm6HF/%)
 	@mkdir -p `dirname $@`
-	$(LINKLINARM_HF) -march=armv6 -mfpu=vfp -marm -o $@ $^
+	$(LINKLINARM_HF) -march=armv6 -mfpu=vfp -marm -o $@ $^ -llockdev
 
 build/arm6HF/%.o: src/%.c
 	@mkdir -p `dirname $@`
@@ -135,7 +136,7 @@ arm5: resources/native/linux/ARM/libNRJavaSerialv5.so
 
 resources/native/linux/ARM/libNRJavaSerialv5.so: $(LINOBJ:%=build/arm5/%)
 	@mkdir -p `dirname $@`
-	$(LINKLINARM) -march=armv5t -o $@ $^
+	$(LINKLINARM) -march=armv5t -o $@ $^ -llockdev
 
 build/arm5/%.o: src/%.c
 	@mkdir -p `dirname $@`

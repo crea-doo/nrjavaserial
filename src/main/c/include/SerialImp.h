@@ -394,9 +394,16 @@ printf("%8li sec : %8li usec\n", enow.tv_sec - snow.tv_sec, enow.tv_sec - snow.t
 
    FIXME
 */
-#elif defined(FHS)
 #	define LOCK fhs_lock
 #	define UNLOCK fhs_unlock
+#elif defined(FHS)
+#ifdef LIBLOCKDEV
+#	define LOCK lib_lock_dev_lock
+#	define UNLOCK lib_lock_dev_unlock
+#else
+#	define LOCK fhs_lock
+#	define UNLOCK fhs_unlock
+#endif /* LIBLOCKDEV */
 #else 
 #	define LOCK system_does_not_lock
 #	define UNLOCK system_does_not_unlock
