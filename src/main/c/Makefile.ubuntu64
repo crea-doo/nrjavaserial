@@ -11,23 +11,23 @@
 # g++-multilib-arm-linux-gnueabi
 # g++-multilib-arm-linux-gnueabihf
 # g++-mingw-w64
-# liblockdev1-dev
 #
 
 JDKINCLUDE=-I/usr/lib/jvm/java-8-oracle/include/ -I/usr/lib/jvm/java-7-openjdk-amd64/include/ -I/usr/lib/jvm/java-7-openjdk-i386/include/ -I"./include/" -I"./include/target/" -I/usr/lib/jvm/java-6-openjdk-amd64/include/ -I/usr/lib/jvm/java-6-openjdk-armhf/include/ -I/usr/lib/jvm/java-6-openjdk-arm/include/ -I/usr/lib/jvm/java-6-openjdk-i386/include/ -I/etc/alternatives/java_sdk/include/ -I/etc/alternatives/java_sdk/include/linux/
+LOCKDEVINCLUDE=-I./include/lockdev/
 
 LINOBJ=fixup.o fuserImp.o SerialImp.o
 
-CCLIN32=gcc -I./include/ubuntu-multilib-fix $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m32 -MMD
+CCLIN32=gcc -I./include/ubuntu-multilib-fix/ $(JDKINCLUDE) $(LOCKDEVINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m32 -MMD
 LINKLIN32=g++ -m32 -shared -Lcross-compile-libs/i386
 
-CCLIN64=gcc-4.8 $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m64 -MMD
+CCLIN64=gcc-4.8 $(JDKINCLUDE) $(LOCKDEVINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m64 -MMD
 LINKLIN64=g++-4.8 -m64 -shared -Lcross-compile-libs/amd64
 
-CCLINARM=arm-linux-gnueabi-gcc $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
+CCLINARM=arm-linux-gnueabi-gcc $(JDKINCLUDE) $(LOCKDEVINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
 LINKLINARM=arm-linux-gnueabi-g++ -shared -fPIC -nostdlib -Lcross-compile-libs/arm
 
-CCLINARM_HF=arm-linux-gnueabihf-gcc $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
+CCLINARM_HF=arm-linux-gnueabihf-gcc $(JDKINCLUDE) $(LOCKDEVINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
 LINKLINARM_HF=arm-linux-gnueabihf-g++ -shared -fPIC -nostdlib -Lcross-compile-libs/armhf
 
 WINOBJ=windows/init.o windows/termios.o fixup.o fuserImp.o SerialImp.o
