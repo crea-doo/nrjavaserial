@@ -14,6 +14,7 @@ include: &toolchain_amd64
         - g++-mingw-w64-i686
         - g++-mingw-w64-x86-64
         - liblockdev1-dev
+        - liblockdev1-dev:i386
 
 # OSX amd64 toolchain
 include: &toolchain_osx_amd64
