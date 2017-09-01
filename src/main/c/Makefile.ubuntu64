@@ -19,16 +19,16 @@ JDKINCLUDE=-I/usr/lib/jvm/java-8-oracle/include/ -I/usr/lib/jvm/java-7-openjdk-a
 LINOBJ=fixup.o fuserImp.o SerialImp.o
 
 CCLIN32=gcc -I./include/ubuntu-multilib-fix/ $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m32 -MMD
-LINKLIN32=g++ -m32 -shared -Lcross-compile-libs/i386
+LINKLIN32=g++ -m32 -shared
 
 CCLIN64=gcc-4.8 $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -m64 -MMD
-LINKLIN64=g++-4.8 -m64 -shared -Lcross-compile-libs/amd64
+LINKLIN64=g++-4.8 -m64 -shared
 
 CCLINARM=arm-linux-gnueabi-gcc $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
-LINKLINARM=arm-linux-gnueabi-g++ -shared -fPIC -nostdlib -Lcross-compile-libs/arm
+LINKLINARM=arm-linux-gnueabi-g++ -shared -fPIC -nostdlib
 
 CCLINARM_HF=arm-linux-gnueabihf-gcc $(JDKINCLUDE) -DLIBLOCKDEV -O3 -Wall -c -fmessage-length=0 -fPIC -MMD -MP
-LINKLINARM_HF=arm-linux-gnueabihf-g++ -shared -fPIC -nostdlib -Lcross-compile-libs/armhf
+LINKLINARM_HF=arm-linux-gnueabihf-g++ -shared -fPIC -nostdlib
 
 WINOBJ=windows/init.o windows/termios.o fixup.o fuserImp.o SerialImp.o
 
