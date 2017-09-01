@@ -43,7 +43,8 @@ include: &toolchain_linux_arm
   env:
     - LABEL=armel_linux
     - CROSS_TOOLCHAIN=true
-    - ARCH=armel
+    - ARCH=arm
+    - GNU_VERSION=4.7
     - GNU_TRIPLET=arm-linux-gnueabi
     - GNU_MULTILIB_TRIPLET=arm-linux-gnueabi
     - GPP_COMPILER=arm-linux-gnueabi-g++
@@ -56,6 +57,7 @@ include: &toolchain_linux_armhf
     - LABEL=armhf_linux
     - CROSS_TOOLCHAIN=true
     - ARCH=armhf
+    - GNU_VERSION=4.8
     - GNU_TRIPLET=arm-linux-gnueabihf
     - GNU_MULTILIB_TRIPLET=arm-linux-gnueabihf
     - GPP_COMPILER=arm-linux-gnueabihf-g++
@@ -68,6 +70,7 @@ include: &toolchain_linux_arm64
     - LABEL=arm64_linux
     - CROSS_TOOLCHAIN=true
     - ARCH=arm64
+    - GNU_VERSION=4.8
     - GNU_TRIPLET=aarch64-linux-gnu
     - GNU_MULTILIB_TRIPLET=arm-linux-gnueabihf
     - GPP_COMPILER=aarch64-linux-gnu-g++
@@ -109,16 +112,16 @@ matrix:
       - make -f Makefile.ubuntu64 clean windows32
       - make -f Makefile.ubuntu64 clean windows64
 
-    # Seems package installation of 'g++-4.8-arm-linux-gnueabi' currently not supported on Travis
-#  - language: c
-#    os: linux
-#    <<: *toolchain_linux_arm
-#    before_script:
-#      - cd src/main/c
-#    script:
-#      - make -f Makefile.ubuntu64 clean arm5
-#      - make -f Makefile.ubuntu64 clean arm6
-#      - make -f Makefile.ubuntu64 clean arm7
+    # Seems only package installation of 'g++-4.7-arm-linux-gnueabi' currently supported on Travis (not 4.8)
+  - language: c
+    os: linux
+    <<: *toolchain_linux_arm
+    before_script:
+      - cd src/main/c
+    script:
+      - make -f Makefile.ubuntu64 clean arm5
+      - make -f Makefile.ubuntu64 clean arm6
+      - make -f Makefile.ubuntu64 clean arm7
 
   - language: c
     os: linux
@@ -147,5 +150,5 @@ before_install:
       echo "deb-src http://archive.ubuntu.com/ubuntu xenial main universe multiverse restricted" | sudo tee -a /etc/apt/sources.list;
       sudo dpkg --add-architecture ${ARCH};
       sudo apt-get update -yq;
-      sudo apt-get install -y g++-4.8-${GNU_TRIPLET} crossbuild-essential-${ARCH} g++-4.8-multilib-${GNU_MULTILIB_TRIPLET};
+      sudo apt-get install -y g++-${GNU_VERSION}-${GNU_TRIPLET} crossbuild-essential-${ARCH} g++-${GNU_VERSION}-multilib-${GNU_MULTILIB_TRIPLET};
     fi
