@@ -11,7 +11,6 @@
 # g++-multilib-arm-linux-gnueabi
 # g++-multilib-arm-linux-gnueabihf
 # g++-mingw-w64
-#
 
 JDKINCLUDE=-I/usr/lib/jvm/java-8-oracle/include/ -I/usr/lib/jvm/java-7-openjdk-amd64/include/ -I/usr/lib/jvm/java-7-openjdk-i386/include/ -I"./include/" -I"./include/target/" -I/etc/alternatives/java_sdk/include/ -I/etc/alternatives/java_sdk/include/linux/
 
